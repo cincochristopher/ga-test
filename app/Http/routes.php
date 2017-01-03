@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Http\Request;
+use App\Models\Program;
+use Illuminate\Support\Facades\Redis;
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,3 +17,13 @@
 $app->get('/', function () use ($app) {
     return $app->version();
 });
+
+$app->get('/programs', function (Request $request) {
+    return response()->json(remember(key_builder($request), 60, Program::take(5)->get()));
+});
+
+$app->get('/invalidate', function () {
+    return;
+});
+
+$app->get('/provider/{providerAlias}', 'ProviderController@getProvider');
