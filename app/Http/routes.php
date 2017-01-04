@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Models\Program;
 use Illuminate\Support\Facades\Redis;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -14,16 +15,25 @@ use Illuminate\Support\Facades\Redis;
 |
 */
 
-$app->get('/', function () use ($app) {
+$app->get('/', function (Request $request) use ($app) {
     return $app->version();
 });
 
 $app->get('/programs', function (Request $request) {
-    return response()->json(remember(key_builder($request), 60, Program::take(5)->get()));
+    $programs = Program::take(5)->get();
+    return response()->json(remember_forever($request->getUri(), $programs));
+});
+
+$app->get('/programs/{id}', function (Request $request, $id) {
+    $program = Program::where('clientID', $id)->first();
+    return response()->json(remember_forever($request->getUri(), $program));
 });
 
 $app->get('/invalidate', function () {
-    return;
+    $pattern = '*/programs/1226*';
+    foreach (redis_scan($pattern) as $key) {
+        Redis::del($key);
+    }
 });
 
 $app->get('/provider/{providerAlias}', 'ProviderController@getProvider');
