@@ -20,20 +20,30 @@ $app->get('/', function (Request $request) use ($app) {
 });
 
 $app->get('/programs', function (Request $request) {
-    $programs = Program::take(5)->get();
-    return response()->json(remember_forever($request->getUri(), $programs));
+    $key = $request->getUri();
+
+    $programs = Cache::rememberForever($key, function () {
+        return Program::take(5)->get();
+    });
+
+    return response()->json($programs);
 });
 
 $app->get('/programs/{id}', function (Request $request, $id) {
-    $program = Program::where('clientID', $id)->first();
-    return response()->json(remember_forever($request->getUri(), $program));
+    $key = $request->getUri();
+    $program = Cache::rememberForever($key, function () use ($id) {
+        return Program::where('clientID', $id)->first();
+    });
+    return response()->json($program);
 });
 
-$app->get('/invalidate', function () {
-    $pattern = '*/programs/1226*';
-    foreach (redis_scan($pattern) as $key) {
-        Redis::del($key);
-    }
+$app->get('/invalidate/programs/{id}', function ($id) {
+    $pattern = "*/programs/$id";
+    Redis::pipeline(function ($pipe) use ($pattern) {
+        foreach (redis_scan($pattern) as $key) {
+            $pipe->del($key);
+        }
+    });
 });
 
 $app->get('/provider/{providerAlias}', 'ProviderController@getProvider');

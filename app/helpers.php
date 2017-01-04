@@ -1,30 +1,5 @@
 <?php
 
-if (! function_exists('remember')) {
-    function remember($key, $minutes, $value)
-    {
-        return Cache::remember($key, $minutes, function () use ($value) {
-            return $value;
-        });
-    }
-}
-
-if (! function_exists('remember_forever')) {
-    function remember_forever($key, $value)
-    {
-        return Cache::rememberForever($key, function () use ($value) {
-            return $value;
-        });
-    }
-}
-
-if (! function_exists('key_builder')) {
-    function key_builder(Illuminate\Http\Request $request)
-    {
-        return $request->path() . '?' . http_build_query($request->all());
-    }
-}
-
 if (! function_exists('redis_scan')) {
     function redis_scan($pattern, $cursor = null, $allResults = array())
     {
