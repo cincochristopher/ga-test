@@ -14,7 +14,7 @@ if (! function_exists('redis_scan')) {
         }
 
         // The call
-        $result = Illuminate\Support\Facades\Redis::scan($cursor, 'match', $pattern);
+        $result = Illuminate\Support\Facades\Redis::scan($cursor, 'MATCH', $pattern);
 
         // Append results to array
         $allResults = array_merge($allResults, $result[1]);

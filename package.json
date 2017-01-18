@@ -1,0 +1,29 @@
+{
+  "name": "test_app",
+  "version": "1.0.0",
+  "description": "dependencies",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "laravel-elixir": "^6.0.0-15"
+  },
+  "devDependencies": {
+    "laravel-elixir-webpack": "^1.0.1"
+  },
+  "scripts": {
+    "test": "gulp"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cincochristopher/redis-test.git"
+  },
+  "author": "Christopher Cinco",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cincochristopher/redis-test/issues"
+  },
+  "homepage": "https://github.com/cincochristopher/redis-test#readme"
+}

@@ -19,6 +19,23 @@ $app->get('/', function (Request $request) use ($app) {
     return $app->version();
 });
 
+$app->get('/users', function (Request $request) {
+    $params = http_build_query($request->all());
+    $user = DB::select('CALL get_users(?)', [$params]);
+    return $user;
+});
+
+$app->get('/users/{id}', function ($id, Request $request) {
+    $params = http_build_query($request->all());
+    $user = DB::select('CALL get_user_by_id(?, ?)', [$id, $params]);
+    return $user;
+});
+
+
+$app->get('/es6-test', function () {
+    return view('es6');
+});
+
 $app->get('/programs', function (Request $request) {
     $key = $request->getUri();
 
@@ -31,14 +48,15 @@ $app->get('/programs', function (Request $request) {
 
 $app->get('/programs/{id}', function (Request $request, $id) {
     $key = $request->getUri();
-    $program = Cache::rememberForever($key, function () use ($id) {
+    $program = Cache::remember($key, 60, function () use ($id) {
         return Program::where('clientID', $id)->first();
     });
     return response()->json($program);
 });
 
-$app->get('/invalidate/programs/{id}', function ($id) {
-    $pattern = "*/programs/$id";
+$app->get('/invalidate/programs/{id}', function (Request $request, $id) {
+    $pattern = "*/programs/$id"."[?]*";
+
     Redis::pipeline(function ($pipe) use ($pattern) {
         foreach (redis_scan($pattern) as $key) {
             $pipe->del($key);
