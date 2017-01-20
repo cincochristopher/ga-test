@@ -31,11 +31,6 @@ $app->get('/users/{id}', function ($id, Request $request) {
     return $user;
 });
 
-
-$app->get('/es6-test', function () {
-    return view('es6');
-});
-
 $app->get('/programs', function (Request $request) {
     $key = $request->getUri();
 
@@ -52,6 +47,10 @@ $app->get('/programs/{id}', function (Request $request, $id) {
         return Program::where('clientID', $id)->first();
     });
     return response()->json($program);
+});
+
+$app->get('/es6-test', function () {
+    return view('es6');
 });
 
 $app->get('/invalidate/programs/{id}', function (Request $request, $id) {

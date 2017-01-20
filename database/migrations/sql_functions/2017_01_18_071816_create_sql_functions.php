@@ -20,7 +20,7 @@ class CreateSqlFunctions extends Migration
             RETURNS VARCHAR(10000)
             BEGIN 
                 DECLARE pos INT DEFAULT 0; 
-                DECLARE len INT DEFAULT 0; 
+                DECLARE len INT DEFAULT 0;
                 DECLARE fieldList varchar(8000) DEFAULT \"\"; 
                 DECLARE nestedWhere varchar(8000) DEFAULT \"\";
                 

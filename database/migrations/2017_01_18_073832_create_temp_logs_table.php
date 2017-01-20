@@ -28,6 +28,6 @@ class CreateTempLogsTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::drop('temp_logs');
     }
 }

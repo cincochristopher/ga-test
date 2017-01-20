@@ -46,6 +46,16 @@ class CreateUsersProcedures extends Migration
         ";
 
         DB::unprepared($procedure);
+    
+        $procedure = "
+            DROP PROCEDURE IF EXISTS `parameterized`;
+            CREATE PROCEDURE `parameterized` (IN `param1` INT, INOUT `param2` VARCHAR(50), OUT `param3` INT)
+            BEGIN
+                SET param3 = param1 + 5;
+            END;
+        ";
+
+        DB::unprepared($procedure);
     }
 
     /**
@@ -57,5 +67,6 @@ class CreateUsersProcedures extends Migration
     {
         DB::unprepared("DROP PROCEDURE IF EXISTS `get_user_by_id`");
         DB::unprepared("DROP PROCEDURE IF EXISTS `get_users`");
+        DB::unprepared("DROP PROCEDURE IF EXISTS `parameterized`");
     }
 }
