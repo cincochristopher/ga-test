@@ -12,7 +12,6 @@ if (! function_exists('redis_scan')) {
         if ($cursor===null) {
             $cursor = "0";
         }
-
         // The call
         $result = Illuminate\Support\Facades\Redis::scan($cursor, 'MATCH', $pattern);
 
